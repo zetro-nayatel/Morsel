@@ -5,17 +5,17 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'Morsel'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'A tiny in-app snackbar / toast for UIKit and SwiftUI.'
   s.description      = <<-DESC
     Morsel shows a short, auto-dismissing bar (a snackbar / toast) at the bottom
     of your app's screen. No permissions or notifications — pure in-app UI, with
     a queue and delay-based scheduling, for both UIKit and SwiftUI.
   DESC
-  s.homepage         = 'https://github.com/your-org/Morsel'
+  s.homepage         = 'https://github.com/zetro-nayatel/Morsel'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Your Name' => 'you@example.com' }
-  s.source           = { :git => 'https://github.com/your-org/Morsel.git', :tag => s.version.to_s }
+  s.author           = { 'zetro-nayatel' => 'zetro.work@gmail.com' }
+  s.source           = { :git => 'https://github.com/zetro-nayatel/Morsel.git', :tag => s.version.to_s }
 
   s.swift_version         = '6.0'
   s.ios.deployment_target = '15.0'

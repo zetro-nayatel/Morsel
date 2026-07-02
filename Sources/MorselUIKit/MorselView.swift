@@ -1,6 +1,8 @@
 #if canImport(UIKit) && !os(watchOS)
 import UIKit
-import MorselCore
+#if !COCOAPODS
+import MorselCore  // Separate module under SPM; same module under CocoaPods.
+#endif
 
 /// The UIKit morsel bar. Usually created for you by ``MorselPresenter``.
 @MainActor

@@ -1,6 +1,8 @@
 #if canImport(SwiftUI)
 import SwiftUI
-import MorselCore
+#if !COCOAPODS
+import MorselCore  // Separate module under SPM; same module under CocoaPods.
+#endif
 
 /// The visual morsel bar for SwiftUI. You rarely use this directly —
 /// `.morselHost(_:)` renders it for you.

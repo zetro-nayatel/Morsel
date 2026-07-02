@@ -34,7 +34,7 @@ renders and animates. That's how one package serves both UIKit and SwiftUI.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/your-org/Morsel.git", from: "0.1.0")
+    .package(url: "https://github.com/zetro-nayatel/Morsel.git", from: "0.1.0")
 ]
 ```
 
