@@ -1,41 +1,41 @@
 import Testing
-@testable import SnackbarCore
+@testable import MorselCore
 
-@Suite("SnackbarQueue")
-struct SnackbarQueueTests {
+@Suite("MorselQueue")
+struct MorselQueueTests {
 
     @Test("A new queue is empty")
     func startsEmpty() {
-        let queue = SnackbarQueue()
+        let queue = MorselQueue()
         #expect(queue.isEmpty)
         #expect(queue.current == nil)
     }
 
-    @Test("Enqueue makes the first snackbar current")
+    @Test("Enqueue makes the first morsel current")
     func firstBecomesCurrent() {
-        let queue = SnackbarQueue()
-        let a = Snackbar(message: "A")
+        let queue = MorselQueue()
+        let a = Morsel(message: "A")
         queue.enqueue(a)
         #expect(queue.current == a)
         #expect(queue.count == 1)
     }
 
-    @Test("Later snackbars wait behind the current one")
+    @Test("Later morsels wait behind the current one")
     func laterOnesWait() {
-        let queue = SnackbarQueue()
-        let a = Snackbar(message: "A")
-        let b = Snackbar(message: "B")
+        let queue = MorselQueue()
+        let a = Morsel(message: "A")
+        let b = Morsel(message: "B")
         queue.enqueue(a)
         queue.enqueue(b)
         #expect(queue.current == a)   // still showing the first
         #expect(queue.count == 2)
     }
 
-    @Test("Dismissing advances to the next snackbar in order")
+    @Test("Dismissing advances to the next morsel in order")
     func dismissAdvances() {
-        let queue = SnackbarQueue()
-        let a = Snackbar(message: "A")
-        let b = Snackbar(message: "B")
+        let queue = MorselQueue()
+        let a = Morsel(message: "A")
+        let b = Morsel(message: "B")
         queue.enqueue(a)
         queue.enqueue(b)
 
@@ -47,18 +47,18 @@ struct SnackbarQueueTests {
 
     @Test("Dismissing the last one empties the queue")
     func dismissLast() {
-        let queue = SnackbarQueue()
-        queue.enqueue(Snackbar(message: "only"))
+        let queue = MorselQueue()
+        queue.enqueue(Morsel(message: "only"))
         let next = queue.dismissCurrent()
         #expect(next == nil)
         #expect(queue.isEmpty)
     }
 
-    @Test("Remove by id takes a snackbar out wherever it is")
+    @Test("Remove by id takes a morsel out wherever it is")
     func removeByID() {
-        let queue = SnackbarQueue()
-        let a = Snackbar(message: "A")
-        let b = Snackbar(message: "B")
+        let queue = MorselQueue()
+        let a = Morsel(message: "A")
+        let b = Morsel(message: "B")
         queue.enqueue(a)
         queue.enqueue(b)
         queue.remove(id: b.id)
@@ -68,9 +68,9 @@ struct SnackbarQueueTests {
 
     @Test("Clear empties everything")
     func clearAll() {
-        let queue = SnackbarQueue()
-        queue.enqueue(Snackbar(message: "A"))
-        queue.enqueue(Snackbar(message: "B"))
+        let queue = MorselQueue()
+        queue.enqueue(Morsel(message: "A"))
+        queue.enqueue(Morsel(message: "B"))
         queue.clear()
         #expect(queue.isEmpty)
     }

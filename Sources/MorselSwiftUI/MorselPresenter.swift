@@ -1,50 +1,50 @@
 #if canImport(SwiftUI)
 import SwiftUI
-import SnackbarCore
+import MorselCore
 
-/// Drives snackbar presentation for SwiftUI.
+/// Drives morsel presentation for SwiftUI.
 ///
 /// Create one, put it in the environment (or hold it in your root view), attach
-/// `.snackbarHost(presenter)`, then call `show(...)` / `schedule(...)` from
+/// `.morselHost(presenter)`, then call `show(...)` / `schedule(...)` from
 /// anywhere. It owns the queue and the auto-dismiss timing.
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 @MainActor
-public final class SnackbarPresenter: ObservableObject {
+public final class MorselPresenter: ObservableObject {
 
-    /// The snackbar currently on screen (drives the view). `nil` when none.
-    @Published public private(set) var current: Snackbar?
+    /// The morsel currently on screen (drives the view). `nil` when none.
+    @Published public private(set) var current: Morsel?
 
-    private let queue = SnackbarQueue()
+    private let queue = MorselQueue()
     private var dismissTask: Task<Void, Never>?
 
     public init() {}
 
-    /// Shows a snackbar now, or queues it behind one already visible.
-    public func show(_ snackbar: Snackbar) {
+    /// Shows a morsel now, or queues it behind one already visible.
+    public func show(_ morsel: Morsel) {
         let wasIdle = (current == nil)
-        queue.enqueue(snackbar)
+        queue.enqueue(morsel)
         if wasIdle { presentNext() }
     }
 
-    /// Convenience overload that builds the `Snackbar` for you.
+    /// Convenience overload that builds the `Morsel` for you.
     public func show(
         _ message: String,
-        style: SnackbarStyle = .info,
-        duration: SnackbarDuration = .short,
-        action: SnackbarAction? = nil
+        style: MorselStyle = .info,
+        duration: MorselDuration = .short,
+        action: MorselAction? = nil
     ) {
-        show(Snackbar(message: message, style: style, duration: duration, action: action))
+        show(Morsel(message: message, style: style, duration: duration, action: action))
     }
 
-    /// Shows a snackbar after `delay` seconds. See SCHEDULING.md.
-    public func schedule(_ snackbar: Snackbar, after delay: TimeInterval) {
+    /// Shows a morsel after `delay` seconds. See SCHEDULING.md.
+    public func schedule(_ morsel: Morsel, after delay: TimeInterval) {
         Task { @MainActor in
             try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
-            self.show(snackbar)
+            self.show(morsel)
         }
     }
 
-    /// Dismisses the current snackbar and advances to the next queued one.
+    /// Dismisses the current morsel and advances to the next queued one.
     public func dismiss() {
         dismissTask?.cancel()
         queue.dismissCurrent()

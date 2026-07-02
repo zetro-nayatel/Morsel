@@ -1,32 +1,32 @@
 #if canImport(SwiftUI)
 import SwiftUI
-import SnackbarCore
+import MorselCore
 
-/// The visual snackbar bar for SwiftUI. You rarely use this directly —
-/// `.snackbarHost(_:)` renders it for you.
+/// The visual morsel bar for SwiftUI. You rarely use this directly —
+/// `.morselHost(_:)` renders it for you.
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
-public struct SnackbarView: View {
-    private let snackbar: Snackbar
+public struct MorselView: View {
+    private let morsel: Morsel
     private let onAction: () -> Void
 
-    public init(snackbar: Snackbar, onAction: @escaping () -> Void = {}) {
-        self.snackbar = snackbar
+    public init(morsel: Morsel, onAction: @escaping () -> Void = {}) {
+        self.morsel = morsel
         self.onAction = onAction
     }
 
     public var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: snackbar.style.systemImageName)
+            Image(systemName: morsel.style.systemImageName)
                 .imageScale(.large)
 
-            Text(snackbar.message)
+            Text(morsel.message)
                 .font(.subheadline.weight(.medium))
                 .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
 
             Spacer(minLength: 8)
 
-            if let action = snackbar.action {
+            if let action = morsel.action {
                 Button(action.title) {
                     action.handler()
                     onAction()
@@ -43,7 +43,7 @@ public struct SnackbarView: View {
     }
 
     private var backgroundColor: Color {
-        switch snackbar.style {
+        switch morsel.style {
         case .info:    return .blue
         case .success: return .green
         case .warning: return .orange

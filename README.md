@@ -1,4 +1,4 @@
-# Snackbar
+# Morsel
 
 A tiny, in-app **snackbar / toast** for iOS — a bar that slides up from the
 bottom of *your app's* screen, shows a short message, and auto-dismisses.
@@ -11,7 +11,7 @@ No permissions, no notifications, no backend. It's pure in-app UI you can show
 │      Your App Screen    │
 │                         │
 │  ┌───────────────────┐  │
-│  │ ✓ Saved!    UNDO  │  │  ← the snackbar
+│  │ ✓ Saved!    UNDO  │  │  ← the morsel
 │  └───────────────────┘  │
 └─────────────────────────┘
 ```
@@ -20,10 +20,10 @@ No permissions, no notifications, no backend. It's pure in-app UI you can show
 
 | Module | Depends on | Contains |
 |---|---|---|
-| `SnackbarCore` | — (pure Swift) | `Snackbar`, `SnackbarStyle`, `SnackbarDuration`, `SnackbarQueue` |
-| `SnackbarUIKit` | Core | `SnackbarPresenter`, `SnackbarView` (UIView) |
-| `SnackbarSwiftUI` | Core | `SnackbarPresenter`, `.snackbarHost()` modifier |
-| `Snackbar` | all three | Umbrella convenience |
+| `MorselCore` | — (pure Swift) | `Morsel`, `MorselStyle`, `MorselDuration`, `MorselQueue` |
+| `MorselUIKit` | Core | `MorselPresenter`, `MorselView` (UIView) |
+| `MorselSwiftUI` | Core | `MorselPresenter`, `.morselHost()` modifier |
+| `Morsel` | all three | Umbrella convenience |
 
 The model + queue live in **Core** with no UI dependency; each UI layer only
 renders and animates. That's how one package serves both UIKit and SwiftUI.
@@ -34,51 +34,51 @@ renders and animates. That's how one package serves both UIKit and SwiftUI.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/your-org/Snackbar.git", from: "0.1.0")
+    .package(url: "https://github.com/your-org/Morsel.git", from: "0.1.0")
 ]
 ```
 
-Add `SnackbarUIKit` **or** `SnackbarSwiftUI` (each pulls in Core).
+Add `MorselUIKit` **or** `MorselSwiftUI` (each pulls in Core).
 
 ### CocoaPods
 
 ```ruby
-pod 'Snackbar/UIKit'      # UIKit apps
-pod 'Snackbar/SwiftUI'    # SwiftUI apps
+pod 'Morsel/UIKit'      # UIKit apps
+pod 'Morsel/SwiftUI'    # SwiftUI apps
 ```
 
 ## Usage — SwiftUI
 
 ```swift
 import SwiftUI
-import SnackbarSwiftUI
+import MorselSwiftUI
 
 struct RootView: View {
-    @StateObject private var snackbar = SnackbarPresenter()
+    @StateObject private var morsel = MorselPresenter()
 
     var body: some View {
         ContentView()
-            .environmentObject(snackbar)   // so child views can reach it
-            .snackbarHost(snackbar)        // attach once, at the top
+            .environmentObject(morsel)   // so child views can reach it
+            .morselHost(morsel)          // attach once, at the top
     }
 }
 
 // Anywhere with access to the presenter:
-snackbar.show("Saved!", style: .success)
+morsel.show("Saved!", style: .success)
 ```
 
 ## Usage — UIKit
 
 ```swift
-import SnackbarUIKit
+import MorselUIKit
 
-SnackbarPresenter.shared.show("Saved!", style: .success)
+MorselPresenter.shared.show("Saved!", style: .success)
 
 // With an action button that stays until tapped:
-SnackbarPresenter.shared.show(Snackbar(
+MorselPresenter.shared.show(Morsel(
     message: "Message deleted",
     duration: .indefinite,
-    action: SnackbarAction(title: "Undo") { restore() }
+    action: MorselAction(title: "Undo") { restore() }
 ))
 ```
 
@@ -89,11 +89,11 @@ each with a matching SF Symbol.
 
 ## Scheduling
 
-Show a snackbar after a delay with `schedule(_:after:)`. See **[SCHEDULING.md](SCHEDULING.md)**
-for delay vs. duration, queueing, and sticky snackbars.
+Show a morsel after a delay with `schedule(_:after:)`. See **[SCHEDULING.md](SCHEDULING.md)**
+for delay vs. duration, queueing, and sticky morsels.
 
 ```swift
-snackbar.schedule(Snackbar(message: "Reminder", style: .warning), after: 5)
+morsel.schedule(Morsel(message: "Reminder", style: .warning), after: 5)
 ```
 
 ## Developing

@@ -1,24 +1,24 @@
 #if canImport(UIKit) && !os(watchOS)
 import UIKit
-import SnackbarCore
+import MorselCore
 
-/// The UIKit snackbar bar. Usually created for you by ``SnackbarPresenter``.
+/// The UIKit morsel bar. Usually created for you by ``MorselPresenter``.
 @MainActor
-public final class SnackbarView: UIView {
+public final class MorselView: UIView {
 
     /// Called when the action button is tapped.
     public var onAction: (() -> Void)?
 
-    public init(snackbar: Snackbar) {
+    public init(morsel: Morsel) {
         super.init(frame: .zero)
-        configure(with: snackbar)
+        configure(with: morsel)
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError("init(coder:) is not supported") }
 
-    private func configure(with snackbar: Snackbar) {
-        backgroundColor = Self.backgroundColor(for: snackbar.style)
+    private func configure(with morsel: Morsel) {
+        backgroundColor = Self.backgroundColor(for: morsel.style)
         layer.cornerRadius = 12
         layer.cornerCurve = .continuous
         layer.shadowColor = UIColor.black.cgColor
@@ -26,13 +26,13 @@ public final class SnackbarView: UIView {
         layer.shadowRadius = 8
         layer.shadowOffset = CGSize(width: 0, height: 4)
 
-        let icon = UIImageView(image: UIImage(systemName: snackbar.style.systemImageName))
+        let icon = UIImageView(image: UIImage(systemName: morsel.style.systemImageName))
         icon.tintColor = .white
         icon.contentMode = .scaleAspectFit
         icon.setContentHuggingPriority(.required, for: .horizontal)
 
         let label = UILabel()
-        label.text = snackbar.message
+        label.text = morsel.message
         label.textColor = .white
         label.font = .preferredFont(forTextStyle: .subheadline)
         label.numberOfLines = 2
@@ -42,7 +42,7 @@ public final class SnackbarView: UIView {
         stack.spacing = 12
         stack.alignment = .center
 
-        if let action = snackbar.action {
+        if let action = morsel.action {
             let button = UIButton(type: .system)
             button.setTitle(action.title, for: .normal)
             button.setTitleColor(.white, for: .normal)
@@ -65,7 +65,7 @@ public final class SnackbarView: UIView {
         ])
     }
 
-    static func backgroundColor(for style: SnackbarStyle) -> UIColor {
+    static func backgroundColor(for style: MorselStyle) -> UIColor {
         switch style {
         case .info:    return .systemBlue
         case .success: return .systemGreen

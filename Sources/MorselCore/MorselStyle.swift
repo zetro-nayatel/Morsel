@@ -1,10 +1,10 @@
 import Foundation
 
-/// The semantic kind of a snackbar, which drives its color and icon.
+/// The semantic kind of a morsel, which drives its color and icon.
 ///
 /// Core stays UI-free: it only names an SF Symbol (which both UIKit and SwiftUI
 /// understand). Each UI layer maps the style to its own color.
-public enum SnackbarStyle: String, CaseIterable, Sendable {
+public enum MorselStyle: String, CaseIterable, Sendable {
     case info
     case success
     case warning

@@ -1,7 +1,7 @@
 import Foundation
 
-/// How long a snackbar stays on screen before it auto-dismisses.
-public enum SnackbarDuration: Equatable, Sendable {
+/// How long a morsel stays on screen before it auto-dismisses.
+public enum MorselDuration: Equatable, Sendable {
     /// A brief message — 2 seconds.
     case short
     /// A longer message — 3.5 seconds.
@@ -11,7 +11,7 @@ public enum SnackbarDuration: Equatable, Sendable {
     /// Stays until the user (or code) dismisses it. Use with an action button.
     case indefinite
 
-    /// The time on screen, or `nil` when the snackbar should not auto-dismiss.
+    /// The time on screen, or `nil` when the morsel should not auto-dismiss.
     public var timeInterval: TimeInterval? {
         switch self {
         case .short:            return 2.0

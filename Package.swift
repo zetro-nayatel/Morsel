@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Snackbar",
+    name: "Morsel",
     // The Core module is pure model + queue logic and builds everywhere, so
     // `swift test` runs on macOS from the command line. UIKit is iOS/tvOS only.
     platforms: [
@@ -14,33 +14,33 @@ let package = Package(
     ],
     products: [
         // Consumers take Core plus whichever UI layer matches their app.
-        .library(name: "SnackbarCore", targets: ["SnackbarCore"]),
-        .library(name: "SnackbarUIKit", targets: ["SnackbarUIKit"]),
-        .library(name: "SnackbarSwiftUI", targets: ["SnackbarSwiftUI"]),
+        .library(name: "MorselCore", targets: ["MorselCore"]),
+        .library(name: "MorselUIKit", targets: ["MorselUIKit"]),
+        .library(name: "MorselSwiftUI", targets: ["MorselSwiftUI"]),
         // Umbrella convenience.
-        .library(name: "Snackbar", targets: ["SnackbarCore", "SnackbarUIKit", "SnackbarSwiftUI"]),
+        .library(name: "Morsel", targets: ["MorselCore", "MorselUIKit", "MorselSwiftUI"]),
     ],
     targets: [
-        // The engine: the Snackbar model, styles, durations, and the queue
+        // The engine: the Morsel model, styles, durations, and the queue
         // that orders multiple snackbars. No UIKit / SwiftUI here.
-        .target(name: "SnackbarCore"),
+        .target(name: "MorselCore"),
 
         // UIKit presenter — drops a snackbar view into the active window.
         .target(
-            name: "SnackbarUIKit",
-            dependencies: ["SnackbarCore"]
+            name: "MorselUIKit",
+            dependencies: ["MorselCore"]
         ),
 
-        // SwiftUI presenter — a `.snackbarHost()` modifier + observable presenter.
+        // SwiftUI presenter — a `.morselHost()` modifier + observable presenter.
         .target(
-            name: "SnackbarSwiftUI",
-            dependencies: ["SnackbarCore"]
+            name: "MorselSwiftUI",
+            dependencies: ["MorselCore"]
         ),
 
         // Tests exercise the pure Core queue/model logic.
         .testTarget(
-            name: "SnackbarCoreTests",
-            dependencies: ["SnackbarCore"]
+            name: "MorselCoreTests",
+            dependencies: ["MorselCore"]
         ),
     ]
 )

@@ -1,53 +1,53 @@
 #if canImport(UIKit) && !os(watchOS)
 import UIKit
-import SnackbarCore
+import MorselCore
 
-/// Shows snackbars in the active window for UIKit apps.
+/// Shows morsels in the active window for UIKit apps.
 ///
 /// Use the shared instance from anywhere:
 /// ```swift
-/// SnackbarPresenter.shared.show("Saved!", style: .success)
-/// SnackbarPresenter.shared.schedule(
-///     Snackbar(message: "Reminder", style: .warning), after: 3
+/// MorselPresenter.shared.show("Saved!", style: .success)
+/// MorselPresenter.shared.schedule(
+///     Morsel(message: "Reminder", style: .warning), after: 3
 /// )
 /// ```
 @MainActor
-public final class SnackbarPresenter {
+public final class MorselPresenter {
 
-    public static let shared = SnackbarPresenter()
+    public static let shared = MorselPresenter()
 
-    private let queue = SnackbarQueue()
-    private var currentView: SnackbarView?
+    private let queue = MorselQueue()
+    private var currentView: MorselView?
     private var dismissTask: Task<Void, Never>?
 
     public init() {}
 
-    /// Shows a snackbar now, or queues it behind one already visible.
-    public func show(_ snackbar: Snackbar) {
+    /// Shows a morsel now, or queues it behind one already visible.
+    public func show(_ morsel: Morsel) {
         let wasIdle = (currentView == nil)
-        queue.enqueue(snackbar)
+        queue.enqueue(morsel)
         if wasIdle { presentNext() }
     }
 
-    /// Convenience overload that builds the `Snackbar` for you.
+    /// Convenience overload that builds the `Morsel` for you.
     public func show(
         _ message: String,
-        style: SnackbarStyle = .info,
-        duration: SnackbarDuration = .short,
-        action: SnackbarAction? = nil
+        style: MorselStyle = .info,
+        duration: MorselDuration = .short,
+        action: MorselAction? = nil
     ) {
-        show(Snackbar(message: message, style: style, duration: duration, action: action))
+        show(Morsel(message: message, style: style, duration: duration, action: action))
     }
 
-    /// Shows a snackbar after `delay` seconds. See SCHEDULING.md.
-    public func schedule(_ snackbar: Snackbar, after delay: TimeInterval) {
+    /// Shows a morsel after `delay` seconds. See SCHEDULING.md.
+    public func schedule(_ morsel: Morsel, after delay: TimeInterval) {
         Task { @MainActor in
             try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
-            self.show(snackbar)
+            self.show(morsel)
         }
     }
 
-    /// Dismisses the current snackbar and advances to the next queued one.
+    /// Dismisses the current morsel and advances to the next queued one.
     public func dismiss() {
         dismissTask?.cancel()
         animateOut(currentView) { [weak self] in
@@ -60,9 +60,9 @@ public final class SnackbarPresenter {
     // MARK: - Presentation
 
     private func presentNext() {
-        guard let snackbar = queue.current, let window = activeWindow else { return }
+        guard let morsel = queue.current, let window = activeWindow else { return }
 
-        let view = SnackbarView(snackbar: snackbar)
+        let view = MorselView(morsel: morsel)
         view.onAction = { [weak self] in self?.dismiss() }
         view.translatesAutoresizingMaskIntoConstraints = false
         window.addSubview(view)
@@ -82,14 +82,14 @@ public final class SnackbarPresenter {
             view.alpha = 1
         }
 
-        guard let interval = snackbar.duration.timeInterval else { return }
+        guard let interval = morsel.duration.timeInterval else { return }
         dismissTask = Task { @MainActor in
             try? await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000))
             if !Task.isCancelled { self.dismiss() }
         }
     }
 
-    private func animateOut(_ view: SnackbarView?, completion: @escaping () -> Void) {
+    private func animateOut(_ view: MorselView?, completion: @escaping () -> Void) {
         guard let view else { completion(); return }
         UIView.animate(withDuration: 0.3, animations: {
             view.transform = CGAffineTransform(translationX: 0, y: view.bounds.height + 32)

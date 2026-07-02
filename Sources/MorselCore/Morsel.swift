@@ -1,8 +1,8 @@
 import Foundation
 
-/// An optional tappable action shown on the trailing edge of a snackbar,
+/// An optional tappable action shown on the trailing edge of a morsel,
 /// e.g. an "Undo" button.
-public struct SnackbarAction {
+public struct MorselAction {
     public let title: String
     public let handler: () -> Void
 
@@ -12,25 +12,25 @@ public struct SnackbarAction {
     }
 }
 
-/// A single snackbar to display: what it says, how it looks, how long it
+/// A single morsel to display: what it says, how it looks, how long it
 /// stays, and an optional action button.
 ///
 /// This is a plain value describing *what* to show. It knows nothing about
 /// UIKit or SwiftUI — the presenters in those modules render it.
-public struct Snackbar: Identifiable {
+public struct Morsel: Identifiable {
     /// Stable identity, used by the queue and by SwiftUI's diffing.
     public let id: String
     public var message: String
-    public var style: SnackbarStyle
-    public var duration: SnackbarDuration
-    public var action: SnackbarAction?
+    public var style: MorselStyle
+    public var duration: MorselDuration
+    public var action: MorselAction?
 
     public init(
         id: String = UUID().uuidString,
         message: String,
-        style: SnackbarStyle = .info,
-        duration: SnackbarDuration = .short,
-        action: SnackbarAction? = nil
+        style: MorselStyle = .info,
+        duration: MorselDuration = .short,
+        action: MorselAction? = nil
     ) {
         self.id = id
         self.message = message
@@ -43,9 +43,9 @@ public struct Snackbar: Identifiable {
     public static let packageVersion = "0.1.0"
 }
 
-extension Snackbar: Equatable {
-    /// Snackbars are compared by identity (the action closure isn't comparable).
-    public static func == (lhs: Snackbar, rhs: Snackbar) -> Bool {
+extension Morsel: Equatable {
+    /// Morsels are compared by identity (the action closure isn't comparable).
+    public static func == (lhs: Morsel, rhs: Morsel) -> Bool {
         lhs.id == rhs.id
     }
 }
